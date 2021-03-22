@@ -33,7 +33,7 @@ def getCatPicture(verbose=False) -> str:
 		response = requests.get("https://api.thecatapi.com/v1/images/search")
 		cat_picture = json.loads(response.text.replace("???", "'"))
 		print(cat_picture[0], end="\t") if verbose else None
-		if not cat_picture[0]["url"].endswith("gif") and 400 < cat_picture[0]["width"] and 500 < cat_picture[0]["height"]:
+		if not cat_picture[0]["url"].endswith("gif") and 500 < cat_picture[0]["width"] and 400 < cat_picture[0]["height"]:
 			print("Thats good!") if verbose else None
 			return cat_picture[0]["url"]
 		print("Not good :(") if verbose else None
@@ -51,6 +51,8 @@ def downloadPicture(url:str) -> None:
 
 	with open(f"cat_pic.{file_ending}", "wb") as file:
 		file.write(response.content)
+
+	return f"cat_pic.{file_ending}"
 
 def writeOnImage(img_path, verbose=False):
 
@@ -84,7 +86,7 @@ def writeOnImage(img_path, verbose=False):
 
 
 ########################################
-verbose = False
+verbose = True
 cat_pic_url = getCatPicture(verbose)
-downloadPicture(cat_pic_url)
-writeOnImage("cat_pic.jpg", verbose)
+cat_pic_path = downloadPicture(cat_pic_url)
+writeOnImage(cat_pic_path, verbose)
